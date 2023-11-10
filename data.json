@@ -1,0 +1,59 @@
+[
+    {
+        "id": "c4cac264-071d-495f-8b16-80b29a6fdc46",
+        "ip_addresses": [
+            "192.168.1.1"
+        ],
+        "name": "Modem-ISP"
+    },
+        {
+        "id": "c43432a64-071d-495f-8b16-803426fdc46",
+        "ip_addresses": [
+            "10.11.126.3"
+        ],
+        "name": "Modem-basecamp"
+    },
+
+    {
+        "id": "86b8d7a6-8343-4f6b-b20e-7925efcea32e",
+        "ip_addresses": [
+            "10.10.10.1"
+        ],
+        "name": "Router-Debian"
+    },
+    {
+        "id": "66b6432c-222a-465c-bf98-1bc4fa869f4d",
+        "ip_addresses": [
+            "10.10.10.2"
+        ],
+        "name": "DNS-Master"
+    },
+    {
+        "id": "74ccf2a7-14fd-4314-9382-9674c4e8d393",
+        "ip_addresses": [
+            "10.10.10.3"
+        ],
+        "name": "DNS-Master-Slave"
+    },
+    {
+        "id": "7767285b-8185-4e1f-9147-927dbff3386f",
+        "ip_addresses": [
+            "10.10.10.4"
+        ],
+        "name": "kevinlocal.com"
+    },
+    {
+        "id": "8cf07a04-6aa6-4af8-94b3-6082394d1d5a",
+        "ip_addresses": [
+            "172.16.1.2"
+        ],
+        "name": "Client-Desktop"
+    },
+    {
+        "id": "cd85fefc-ed9e-4cb3-94b1-986f76b59da5",
+        "ip_addresses": [
+            "172.16.1.1"
+        ],
+        "name": "Ubuntu"
+    }
+]

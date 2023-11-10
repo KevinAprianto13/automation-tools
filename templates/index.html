@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Majestic Monitoring</title>
+	<!-- plugins:css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/mdi/css/materialdesignicons.min.css')}} ">
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/base/vendor.bundle.base.css')}} ">
+	<!-- endinject -->
+	<!-- plugin css for this page -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-bs4/dataTables.bootstrap4.css')}} ">
+	<!-- End plugin css for this page -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">   
+	<!-- endinject -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='images/favicon.png/css')}} ">
+	
+
+</head>
+<body>
+	<!-- partial:partials/_navbar.html -->
+	<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+		<div class="navbar-brand-wrapper d-flex justify-content-center">
+			<div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">  
+				<a class="navbar-brand brand-logo" href="index.html"><img src=" {{ url_for('static', filename='images/logo.svg') }}" alt="logo"/></a>
+
+
+
+				
+				<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+					<span class="mdi mdi-sort-variant"></span>
+				</button>
+			</div>  
+		</div>
+		<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+			<ul class="navbar-nav mr-lg-4 w-100">
+				<li class="nav-item nav-search d-none d-lg-block w-100">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="search">
+								<i class="mdi mdi-magnify"></i>
+							</span>
+						</div>
+						<input type="text" class="form-control" placeholder="Search now" aria-label="search" aria-describedby="search" id="searchInput">
+					</div>
+				</li>
+			</ul>
+			<ul class="navbar-nav navbar-nav-right">
+				<li class="nav-item dropdown me-1">
+					<a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown">
+						<i class="mdi mdi-message-text mx-0"></i>
+						<span class="count"></span>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+						<p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+						{% for entry in log_data %}
+						<a class="dropdown-item">
+							<div class="item-content flex-grow">
+								<h6 class="ellipsis font-weight-normal">{{ entry.device_name }}
+								</h6>
+								<h1 class="ellipsis font-medium">{{ entry.date }}</h1>
+							</div>
+						</a>
+						{% endfor %}
+					</div>
+				</li>
+				
+			</ul>
+			<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+				<span class="mdi mdi-menu"></span>
+			</button>
+		</div>
+	</nav>
+	<!-- partial -->
+	<div class="container-fluid page-body-wrapper">
+		<!-- partial:partials/_sidebar.html -->
+		<nav class="sidebar sidebar-offcanvas" id="sidebar">
+			<ul class="nav">
+				<li class="nav-item">
+					<a class="nav-link" href="/">
+						<i class="mdi  mdi mdi-laptop-windows "></i>
+						<span class="menu-title">Dashboard Monitoring</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/test_bandwidth">
+						<i class="mdi mdi mdi-access-point "></i>
+						<span class="menu-title">Speedtest</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/traceroute">
+						<i class="mdi mdi mdi-lan-pending "></i>
+						<span class="menu-title">Traceroute</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/login_mikrotik">
+						<i class="mdi mdi mdi-login  "></i>
+						<span class="menu-title">Login Mikrotik</span>
+					</a>
+				</li>
+				
+			</ul>
+		</nav>
+
+		<!-- partial -->
+		<div class="main-panel">
+			<div class="content-wrapper">
+				
+				<div class="row">
+					<div class="col-md-12 grid-margin">
+						<div class="d-flex justify-content-between flex-wrap">
+							<div class="d-flex align-items-end flex-wrap">
+								<div class="me-md-3 me-xl-5">
+									<h2>Welcome back,</h2>
+									<p class="mb-md-0">Your analytics dashboard template.</p>
+
+								</div>
+								<div class="d-flex">
+									<i class="mdi mdi-home text-muted hover-cursor"></i>
+									<p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Dashboard&nbsp;/&nbsp;</p>
+									<p class="text-primary mb-0 hover-cursor">Analytics</p>
+								</div>
+							</div>
+							<div class="col-lg-12 grid-margin stretch-card">
+								<div class="card">
+									<div class="card-body">
+										<!-- Button trigger modal -->
+										<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+											Add Device
+										</button>
+
+										<!-- Modal -->
+										<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title" id="exampleModalLabel">Add Device Monitoring</h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+													</div>
+													<div class="modal-body">
+														<!-- Modal Body -->
+														<form action="/add" method="post">
+															<div class="mb-4">
+																<label for="ip_address" class="block text-sm font-medium text-gray-600">IP Address or Domain:</label>
+																<input type="text" id="ip_address" name="ip_address"
+																placeholder="Enter IP address or domain"
+																class="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-500">
+															</div>
+															<div class="mb-4">
+																<label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
+																<input type="text" id="name" name="name"
+																class="border border-gray-300 rounded px-3 py-2 w-full focus:outline-none focus:border-blue-500">
+															</div>
+															<button type="submit"
+															class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Device
+														</button>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="table-responsive">
+										<table class="w-full mb-6">
+
+											<thead>
+												<tr class="bg-gray-200">
+													<th class="border px-4 py-2">IP Address</th>
+													<th class="border px-4 py-2">Name</th>
+													<th class="border px-4 py-2">Status</th>
+													<th class="border px-4 py-2">Action</th>
+												</tr>
+											</thead>
+											<tbody id="deviceTableBody">
+												{% for device in devices %}
+												<tr class="border">
+													<td class="border px-4 py-2">{{ device.ip_addresses[0] }}</td>
+													<td class="border px-4 py-2">{{ device.name }}</td>
+													<td id="status_{{ device.ip_addresses[0] }}" class="border px-4 py-2"></td>
+													<td class="border px-4 py-2">
+														<button onclick="deleteDevice('{{ device.id }}')"
+														class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+													</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									
+									<table class="w-full">
+										<thead>
+											<tr class="bg-gray-200">
+												<th class="border px-4 py-2">IP Address</th>
+												<th class="border px-4 py-2">Name</th>
+												<th class="border px-4 py-2">Start</th>
+												<th class="border px-4 py-2">End</th>
+												<th class="border px-4 py-2">Duration</th>
+												<th class="border px-4 py-2">Date</th>
+											</tr>
+										</thead>
+										<tbody id="logTableBody">
+											{% for entry in log_data %}
+											<tr class="border">
+												<td class="border px-4 py-2">{{ entry.ip_address }}</td>
+												<td class="border px-4 py-2">{{ entry.device_name }}</td>
+												<td class="border px-4 py-2">{{ entry.start_time }}</td>
+												<td class="border px-4 py-2">{{ entry.end_time }}</td>
+												<td class="border px-4 py-2">{{ entry.duration }}</td>
+												<td class="border px-4 py-2">{{ entry.date }}</td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				
+				<!-- content-wrapper ends -->
+				<!-- partial:partials/_footer.html -->
+				<footer class="footer">
+					<div class="d-sm-flex justify-content-center justify-content-sm-between">
+						<span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>
+						<span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard  </a> templates</span>
+					</div>
+				</footer>
+				<!-- partial -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+
+	<!-- Custom Scripts -->
+	<script>
+		function searchDevices() {
+			var input, filter, table, tr, tdIP, tdName, i, txtValueIP, txtValueName;
+			input = document.getElementById("searchInput");
+			filter = input.value.toLowerCase();
+
+		// Mencari baris di tabel perangkat
+		table = document.getElementById("deviceTableBody");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+				tdIP = tr[i].getElementsByTagName("td")[0]; // Kolom pertama (IP Address)
+				tdName = tr[i].getElementsByTagName("td")[1]; // Kolom kedua (Name)
+				if (tdIP && tdName) {
+					txtValueIP = tdIP.textContent || tdIP.innerText;
+					txtValueName = tdName.textContent || tdName.innerText;
+					if (txtValueIP.toLowerCase().indexOf(filter) > -1 || txtValueName.toLowerCase().indexOf(filter) > -1) {
+								tr[i].style.display = ""; // Menampilkan baris jika ada kecocokan dengan pencarian pada IP Address atau Name
+							} else {
+								tr[i].style.display = "none"; // Menyembunyikan baris jika tidak ada kecocokan dengan pencarian pada IP Address atau Name
+							}
+						}
+					}
+
+		// Mencari baris di tabel log
+		table = document.getElementById("logTableBody");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+				tdIP = tr[i].getElementsByTagName("td")[0]; // Kolom pertama (IP Address)
+				tdName = tr[i].getElementsByTagName("td")[1]; // Kolom kedua (Device Name)
+				if (tdIP && tdName) {
+					txtValueIP = tdIP.textContent || tdIP.innerText;
+					txtValueName = tdName.textContent || tdName.innerText;
+					if (txtValueIP.toLowerCase().indexOf(filter) > -1 || txtValueName.toLowerCase().indexOf(filter) > -1) {
+								tr[i].style.display = ""; // Menampilkan baris jika ada kecocokan dengan pencarian pada IP Address atau Device Name
+							} else {
+								tr[i].style.display = "none"; // Menyembunyikan baris jika tidak ada kecocokan dengan pencarian pada IP Address atau Device Name
+							}
+						}
+					}
+				}
+
+// Tambahkan event listener untuk input pencarian
+document.getElementById("searchInput").addEventListener("keyup", searchDevices);
+
+
+				// Fungsi untuk memperbarui status perangkat secara real-time
+				function updateStatus() {
+					fetch('/status')
+					.then(response => response.json())
+					.then(data => {
+										// Perbarui status perangkat dalam tabel
+										Object.keys(data).forEach(ip => {
+											var statusCell = document.getElementById('status_' + ip);
+											if (statusCell) {
+												statusCell.textContent = data[ip].status;
+											}
+										});
+									})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				}
+
+				// Perbarui status setiap 5 detik
+				setInterval(updateStatus, 5000);
+
+				// Fungsi untuk menghapus perangkat berdasarkan ID
+				function deleteDevice(id) {
+					var confirmation = confirm("Are you sure you want to delete this device?");
+					if (confirmation) {
+								// Kirim permintaan DELETE ke server menggunakan metode fetch
+								fetch('/delete/' + id, {
+									method: 'DELETE',
+								})
+								.then(response => response.json())
+								.then(data => {
+												// Di sini Anda bisa menangani respons jika perlu
+												// Secara dinamis hapus baris dari tabel jika diperlukan
+												// Contoh: document.getElementById('deviceTableBody').deleteRow(index);
+												window.location.reload(); // Perbarui halaman setelah menghapus data
+											});
+							}
+						}
+
+				// Tampilkan modal tambah perangkat
+				document.querySelector('[data-target="#addDeviceModal"]').addEventListener('click', function () {
+					document.querySelector('.modal').classList.remove('hidden');
+				});
+
+				// Sembunyikan modal tambah perangkat
+				document.querySelectorAll('.close-modal').forEach(function (el) {
+					el.addEventListener('click', function () {
+						document.querySelector('.modal').classList.add('hidden');
+					});
+				});
+
+				// Fungsi untuk memperbarui log data dari server
+				function updateLog() {
+					fetch('/get_log_data')
+					.then(response => response.json())
+					.then(data => {
+						var logTableBody = document.getElementById("logTableBody");
+										logTableBody.innerHTML = ''; // Bersihkan tabel log sebelum menambahkan data baru
+										data.log_data.forEach(entry => {
+											var newRow = logTableBody.insertRow();
+											var cellIP = newRow.insertCell();
+											var cellName = newRow.insertCell();
+											var cellStartTime = newRow.insertCell();
+											var cellEndTime = newRow.insertCell();
+											var cellDuration = newRow.insertCell();
+											var cellDate = newRow.insertCell();
+
+											cellIP.textContent = entry.ip_address;
+											cellName.textContent = entry.device_name;
+											cellStartTime.textContent = entry.start_time;
+											cellEndTime.textContent = entry.end_time;
+											cellDuration.textContent = entry.duration;
+											cellDate.textContent = entry.date;
+										});
+									})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				}
+
+				// Perbarui log setiap 5 detik
+				setInterval(updateLog, 5000);
+
+
+				function pingDomain() {
+					var domainInput = document.getElementById("pingDomainInput");
+					var pingResult = document.getElementById("pingDomainResult");
+					var domain = domainInput.value;
+
+					if (!domain) {
+						alert("Please enter a domain to ping.");
+						return;
+					}
+
+					pingResult.textContent = "Pinging " + domain + "...";
+
+					fetch('/ping-domain?domain=' + domain)
+					.then(response => response.text())
+					.then(data => {
+						pingResult.textContent = data;
+					})
+					.catch(error => {
+						pingResult.textContent = 'Error occurred while pinging ' + domain + ': ' + error;
+					});
+				}
+			</script>
+			<!-- Bootstrap JS -->
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+			<!-- plugins:js -->
+			<script src="{{ url_for('static', filename='vendors/base/vendor.bundle.base.js')}} "></script>
+
+			
+			<!-- endinject -->
+			<!-- Plugin js for this page-->
+			<script src="{{ url_for('static', filename='vendors/chart.js/Chart.min.js')}} "></script>
+			<script src="{{ url_for('static', filename='vendors/datatables.net/jquery.dataTables.js')}} "></script>
+			<script src="{{ url_for('static', filename='vendors/datatables.net-bs4/dataTables.bootstrap4.js')}} "></script>
+
+			<!-- End plugin js for this page-->
+			<!-- inject:js -->
+
+			<script src="{{ url_for('static', filename='js/off-canvas.js')}} "></script>
+			<script src="{{ url_for('static', filename='js/hoverable-collapse.js')}} "></script>
+			<script src="{{ url_for('static', filename='js/template.js')}} "></script>
+
+			<!-- endinject -->
+			<!-- Custom js for this page-->
+			<script src="{{ url_for('static', filename='js/dashboard.js')}} "></script>
+			<script src="{{ url_for('static', filename='js/data-table.js')}} "></script>
+			<script src="{{ url_for('static', filename='js/jquery.dataTables.js')}} "></script>
+			<script src="{{ url_for('static', filename='js/dataTables.bootstrap4.js')}} "></script>
+			
+			<!-- End custom js for this page-->
+			<script src="{{ url_for('static', filename='js/jquery.cookie.js')}} "></script>
+			
+		</body>
+
+		</html>
+

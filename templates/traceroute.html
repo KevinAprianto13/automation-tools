@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traceroute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .scrollable-table {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 h-screen flex justify-center items-center">
+    <div class="bg-white p-8 rounded shadow-lg max-w-3xl w-full">
+        <h1 class="text-3xl font-semibold mb-6">Traceroute Result</h1>
+        <form method="POST" class="mb-6" id="tracerouteForm">
+            <label for="target_ip" class="block text-sm font-medium text-gray-600">Masukkan IP atau domain yang ingin Anda traceroute:</label>
+            <input type="text" id="target_ip" name="target_ip" required class="mt-1 p-2 w-full border rounded focus:ring focus:ring-indigo-200">
+            <button type="submit" class="mt-4 p-2 bg-indigo-500 text-white rounded hover:bg-indigo-700 focus:ring focus:ring-indigo-200 focus:outline-none">Traceroute</button>
+        </form>
+        <h2 class="text-xl font-semibold mb-4">Hasil Traceroute:</h2>
+       <div id="tracerouteResults" class="scrollable-table"></div>
+            <table class="min-w-full table-auto border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border px-4 py-2">Hop</th>
+                        <th class="border px-4 py-2">Response</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hop in traceroute_result %}
+                    <tr>
+                        <td class="border px-4 py-2">{{ loop.index }}</td>
+                        <td class="border px-4 py-2">{{ hop }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    <script>
+    document.getElementById("tracerouteForm").onsubmit = async function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        try {
+            const response = await fetch('/traceroute', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            displayResults(data.traceroute_result);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    function displayResults(tracerouteResult) {
+        const resultsDiv = document.getElementById('tracerouteResults');
+        resultsDiv.innerHTML = ''; // Bersihkan hasil sebelum menambahkan yang baru
+        const table = document.createElement('table');
+        table.classList.add('min-w-full', 'table-auto', 'border-collapse');
+        const tbody = document.createElement('tbody');
+
+        tracerouteResult.forEach((hop, index) => {
+            const row = document.createElement('tr');
+            const hopCell = document.createElement('td');
+            hopCell.classList.add('border', 'px-4', 'py-2');
+            hopCell.textContent = index + 1;
+            const responseCell = document.createElement('td');
+            responseCell.classList.add('border', 'px-4', 'py-2');
+            responseCell.textContent = hop;
+            row.appendChild(hopCell);
+            row.appendChild(responseCell);
+            tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        resultsDiv.appendChild(table);
+    }
+</script>
+
+</script>
+
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Majestic Mikrotik</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/mdi/css/materialdesignicons.min.css')}} ">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/base/vendor.bundle.base.css')}} ">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendors/datatables.net-bs4/dataTables.bootstrap4.css')}} ">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">   
+  <!-- endinject -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='images/favicon.png/css')}} ">
+  
+
+</head>
+<body>
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="navbar-brand-wrapper d-flex justify-content-center">
+      <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">  
+        <a class="navbar-brand brand-logo" href="index.html"><img src=" {{ url_for('static', filename='images/logo.svg') }}" alt="logo"/></a>
+
+
+
+        
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-sort-variant"></span>
+        </button>
+      </div>  
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+      <ul class="navbar-nav mr-lg-4 w-100">
+        <li class="nav-item nav-search d-none d-lg-block w-100">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="search">
+                <i class="mdi mdi-magnify"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" placeholder="Search now" aria-label="search" aria-describedby="search" id="searchInput">
+          </div>
+        </li>
+      </ul>
+
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/active_connection">
+              <i class="mdi mdi-home menu-icon"></i>
+              <span class="menu-title">Active Connetion</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/management_pppoe">
+              <i class="mdi mdi mdi-account-box "></i>
+              <span class="menu-title">Management Pppoe</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">
+              <i class="mdi  mdi mdi-logout"></i>
+              <span class="menu-title">Out Mikrotik</span>
+            </a>
+          </li>
+
+
+          
+          
+        </ul>
+      </nav>
+
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between flex-wrap">
+                <div class="d-flex align-items-end flex-wrap">
+                  <div class="me-md-3 me-xl-5">
+                    <h2>Welcome back,</h2>
+                    <p class="mb-md-0">Your analytics dashboard template.</p>
+
+                  </div>
+                  <div class="d-flex">
+                    <i class="mdi mdi-home text-muted hover-cursor"></i>
+                    <p class="text-muted mb-0 hover-cursor">&nbsp;/&nbsp;Dashboard&nbsp;/&nbsp;</p>
+                    <p class="text-primary mb-0 hover-cursor">Analytics</p>
+                  </div>
+                </div>
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+
+
+                      <div class="table-responsive">
+                        <table class="w-full mb-6">
+
+                          <thead>
+                            <tr class="bg-gray-200">
+                              <th class="border px-4 py-2">Username</th>
+                              <th class="border px-4 py-2">Service</th>
+                              <th class="border px-4 py-2">Profile</th>
+                              <th class="border px-4 py-2">Status</th>
+                              <th class="border px-4 py-2">Action</th>
+                              
+                            </tr>
+                          </thead>
+                          <tbody id="nameTableBody">
+                            {% for pppoe in show_ppp %}
+                            <tr class="border">
+                              <td class="border px-4 py-2">{{ pppoe.name }}</td>
+                              <td class="border px-4 py-2">{{ pppoe.service }}</td>
+                              <td class="border px-4 py-2">{{ pppoe.profile }}</td>
+                              <td class="border px-4 py-2">{{ 'Active' if pppoe.disabled == 'false' else 'Inactive' }}</td>
+                              
+                              <td class="px-6 py-4 whitespace-nowrap">
+                               <form action="/management_pppoe/disable_pppoe" method="post">
+                                 <input type="hidden" name="pppoe_id" value="{{ pppoe.id }}">
+                                 <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded">Disable</button>
+                               </form>
+                               <form action="/management_pppoe/enable_pppoe" method="post">
+                                 <input type="hidden" name="pppoe_id" value="{{ pppoe.id }}">
+                                 <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Enable</button>
+                               </form>
+                             </td>
+
+                           </tr>
+                           {% endfor %}
+                         </tbody>
+                       </table>
+
+                     </div>
+                   </div>
+                 </div>  <!-- content-wrapper ends -->
+                 <!-- partial:partials/_footer.html -->
+                 <footer class="footer">
+                  <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>
+                    <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard  </a> templates</span>
+                  </div>
+                </footer>
+                <!-- partial -->
+              </div>
+              <!-- main-panel ends -->
+            </div>
+            <!-- page-body-wrapper ends -->
+          </div>
+          <!-- container-scroller -->
+
+          <!-- Custom Scripts -->
+          <script>
+      // Mendapatkan elemen input pencarian
+      var input = document.getElementById("searchInput");
+
+// Menambahkan event listener untuk input pencarian
+input.addEventListener("keyup", function() {
+  var filter, table, tr, td, i, txtValue;
+  filter = input.value.toUpperCase();
+  table = document.getElementById("nameTableBody");
+  tr = table.getElementsByTagName("tr");
+
+    // Loop melalui semua baris tabel, sembunyikan yang tidak sesuai dengan kriteria pencarian
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0]; // Kolom pertama berisi nama
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = ""; // Menampilkan baris jika ada kecocokan
+              } else {
+                tr[i].style.display = "none"; // Menyembunyikan baris jika tidak ada kecocokan
+              }
+            }
+          }
+        });
+
+
+
+
+      </script>
+      <!-- Bootstrap JS -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+      <!-- plugins:js -->
+      <script src="{{ url_for('static', filename='vendors/base/vendor.bundle.base.js')}} "></script>
+
+      
+      <!-- endinject -->
+      <!-- Plugin js for this page-->
+      <script src="{{ url_for('static', filename='vendors/chart.js/Chart.min.js')}} "></script>
+      <script src="{{ url_for('static', filename='vendors/datatables.net/jquery.dataTables.js')}} "></script>
+      <script src="{{ url_for('static', filename='vendors/datatables.net-bs4/dataTables.bootstrap4.js')}} "></script>
+
+      <!-- End plugin js for this page-->
+      <!-- inject:js -->
+
+      <script src="{{ url_for('static', filename='js/off-canvas.js')}} "></script>
+      <script src="{{ url_for('static', filename='js/hoverable-collapse.js')}} "></script>
+      <script src="{{ url_for('static', filename='js/template.js')}} "></script>
+
+      <!-- endinject -->
+      <!-- Custom js for this page-->
+      <script src="{{ url_for('static', filename='js/dashboard.js')}} "></script>
+      <script src="{{ url_for('static', filename='js/data-table.js')}} "></script>
+      <script src="{{ url_for('static', filename='js/jquery.dataTables.js')}} "></script>
+      <script src="{{ url_for('static', filename='js/dataTables.bootstrap4.js')}} "></script>
+      
+      <!-- End custom js for this page-->
+      <script src="{{ url_for('static', filename='js/jquery.cookie.js')}} "></script>
+      
+    </body>
+
+    </html>
+
